@@ -54,6 +54,20 @@ def test_delete(db_connection):
         Item(8, 'Dusty Bread Roll', 1.19, 1)
     ]
 
+def test_delete_by_name(db_connection):
+    db_connection.seed('seeds/items_orders.sql')
+    repo = ItemRepository(db_connection)
+    assert repo.delete_by_name('Strap') == None
+    assert repo.all() == [
+        Item(1, 'Maton Acoustic', 2345.99, 3),
+        Item(2, 'Tanglewood Acoustic', 679.49, 6),
+        Item(3, 'Eastman Mandolin', 659.00, 4),
+        Item(4, 'Kala Baritone Ukulele', 519.49, 5),
+        Item(5, 'Elixir Strings', 11.99, 20),
+        Item(7, 'Snark Tuner', 19.99, 15),
+        Item(8, 'Dusty Bread Roll', 1.19, 1)
+    ]
+
 def test_update(db_connection):
     db_connection.seed('seeds/items_orders.sql')
     repo = ItemRepository(db_connection)

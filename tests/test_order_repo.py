@@ -23,7 +23,7 @@ def test_find(db_connection):
 def test_create(db_connection):
     db_connection.seed('seeds/items_orders.sql')
     repo = OrderRepository(db_connection)
-    assert repo.create(Order(None, 'Benedict', datetime.date(2023, 8, 11))) == None
+    assert repo.create(Order(None, 'Benedict', datetime.date(2023, 8, 11))) == 6
     assert repo.all() == [
         Order(1, 'Benedict', datetime.date(2023, 5, 30)),
         Order(2, 'Will', datetime.date(2022, 7, 4)),

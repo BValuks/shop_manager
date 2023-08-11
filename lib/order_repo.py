@@ -18,7 +18,8 @@ class OrderRepository:
         return order
     
     def create(self, order):
-        self.connection.execute('INSERT INTO orders (customer, date) VALUES (%s, %s)', [order.customer, order.date])
+        id = self.connection.execute('INSERT INTO orders (customer, date) VALUES (%s, %s) RETURNING id', [order.customer, order.date])
+        return id[0]['id']
     
     def delete(self, id):
         self.connection.execute('DELETE FROM orders WHERE id = %s', [id])

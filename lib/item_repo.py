@@ -17,11 +17,19 @@ class ItemRepository:
         item = Item(row[0]['id'], row[0]['name'], row[0]['unit_price'], row[0]['quantity'])
         return item
     
+    def find_by_name(self, name):
+        row = self.connection.execute('SELECT * FROM items WHERE name = %s', [name])
+        item = Item(row[0]['id'], row[0]['name'], row[0]['unit_price'], row[0]['quantity'])
+        return item
+    
     def create(self, item):
         self.connection.execute('INSERT INTO items (name, unit_price, quantity) VALUES (%s, %s, %s)', [item.name, item.unit_price, item.quantity])
     
     def delete(self, id):
         self.connection.execute('DELETE FROM items WHERE id = %s', [id])
+    
+    def delete_by_name(self, name):
+        self.connection.execute('DELETE FROM items WHERE name = %s', [name])
     
     def update(self, item):
         self.connection.execute('UPDATE items SET name = %s, unit_price = %s, quantity = %s WHERE id = %s', [item.name, item.unit_price, item.quantity, item.id])
