@@ -16,7 +16,7 @@ item_repo = ItemRepository(connection)
 order_repo = OrderRepository(connection)
 
 print('Welcome to the shop management program!\n')
-print('What do you want to do?\n  1 - list all shop items\n  2 - create a new item\n  3 - update item\n  4 - delete item\n  5 - list all orders\n  6 - create a new order')
+print('What do you want to do?\n  1 - list all shop items\n  2 - create a new item\n  3 - update item\n  4 - delete item\n  5 - list items by order\n  6 - list all orders\n  7 - create a new order')
 print('')
 choice = input('- ')
 
@@ -63,13 +63,25 @@ elif choice == '4': # delete item
     item_repo.delete_by_name(item)
     print(f'{item} has been deleted from shop items list')
 
-elif choice == '5': # list all orders
+elif choice == '5': # find items by order
+    print('')
+    order_number = input('Please enter the order number to see the items listed: ')
+    order = item_repo.find_by_order(order_number)
+    print(f'\nOrder #{order.id} Customer name: {order.customer}, Date: {order.date}\n')
+    total = 0
+    for item in order.items:
+        print(f'#{item.id} {item.name}:\n  - Unit Price: {item.unit_price}\n')
+        total += item.unit_price
+    print(f'Grand total: {round(total, 2)}')
+    
+
+elif choice == '6': # list all orders
     orders = order_repo.all()
     print('\nHere is a list of all orders:\n')
     for order in orders:
         print(f'#{order.id} Customer name: {order.customer}\n  Date: {order.date}')
     
-elif choice == '6': # create a new order
+elif choice == '7': # create a new order
     print('')
     customer = input('\nWhat is the customer name?\n')
     order_id = order_repo.create(Order(None, customer, date.today()))
