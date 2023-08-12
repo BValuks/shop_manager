@@ -16,7 +16,7 @@ item_repo = ItemRepository(connection)
 order_repo = OrderRepository(connection)
 
 print('Welcome to the shop management program!\n')
-print('What do you want to do?\n  1 - list all shop items\n  2 - create a new item\n  3 - update item\n  4 - delete item\n  5 - list items by order\n  6 - list all orders\n  7 - create a new order')
+print('What do you want to do?\n  1 - list all shop items\n  2 - find orders by item\n  3 - create a new item\n  4 - update item\n  5 - delete item\n  6 - list all orders\n  7 - list items by order\n  8 - create a new order')
 print('')
 choice = input('- ')
 
@@ -26,7 +26,15 @@ if choice == '1': # list all shop items
     for item in items:
         print(f'#{item.id} {item.name}:\n  - Unit Price: {item.unit_price}\n  - Quantity: {item.quantity}')
 
-elif choice == '2': # create a new item
+elif choice == '2': # find orders by item
+    print('')
+    item_choice = input('Please enter the item to see orders listed: ')
+    item = order_repo.find_by_item(item_choice)
+    print(f'\nItem #{item.id} {item.name}, Unit Price: {item.unit_price}\n')
+    for order in item.orders:
+        print(f'#{order.id} Customer Name: {order.customer}, Date: {order.date}')
+
+elif choice == '3': # create a new item
     print('')
     name = input("What is the item's name? ")
     price = input("What is the item's unit price? ")
@@ -34,7 +42,7 @@ elif choice == '2': # create a new item
     item_repo.create(Item(None, name, price, quantity))
     print(f'{name} has been added with a unit price of {price} and a quantity of {quantity}')
 
-elif choice == '3': # update item
+elif choice == '4': # update item
     print('')
     item_choice = input('What item would you like to update? ')
     item = item_repo.find_by_name(item_choice)
@@ -57,13 +65,19 @@ elif choice == '3': # update item
     item_repo.update(item)
     print(f'{item_choice} has been updated')
 
-elif choice == '4': # delete item
+elif choice == '5': # delete item
     print('')
     item = input('Which item would you like to delete? ')
     item_repo.delete_by_name(item)
     print(f'{item} has been deleted from shop items list')
 
-elif choice == '5': # find items by order
+elif choice == '6': # list all orders
+    orders = order_repo.all()
+    print('\nHere is a list of all orders:\n')
+    for order in orders:
+        print(f'#{order.id} Customer name: {order.customer}\n  Date: {order.date}')
+
+elif choice == '7': # find items by order
     print('')
     order_number = input('Please enter the order number to see the items listed: ')
     order = item_repo.find_by_order(order_number)
@@ -74,14 +88,7 @@ elif choice == '5': # find items by order
         total += item.unit_price
     print(f'Grand total: {round(total, 2)}')
     
-
-elif choice == '6': # list all orders
-    orders = order_repo.all()
-    print('\nHere is a list of all orders:\n')
-    for order in orders:
-        print(f'#{order.id} Customer name: {order.customer}\n  Date: {order.date}')
-    
-elif choice == '7': # create a new order
+elif choice == '8': # create a new order
     print('')
     customer = input('\nWhat is the customer name?\n')
     order_id = order_repo.create(Order(None, customer, date.today()))
@@ -91,6 +98,8 @@ elif choice == '7': # create a new order
     for i in range(int(number_of_items)):
         item = input(f'Item {i + 1}: ')
         object = item_repo.find_by_name(item)
+        object.quantity -= 1
+        item_repo.update(object)
         items.append(object)
     for item in items:
         connection.execute('INSERT INTO items_orders (item_id, order_id) VALUES (%s, %s)', [item.id, order_id])

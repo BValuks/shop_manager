@@ -7,10 +7,10 @@ class ItemRepository:
     
     def all(self):
         rows = self.connection.execute('SELECT * FROM items ORDER BY id ASC')
-        items = []
-        for row in rows:
-            item = Item(row['id'], row['name'], row['unit_price'], row['quantity'])
-            items.append(item)
+        items = [Item(row['id'], row['name'], row['unit_price'], row['quantity']) for row in rows]
+        # for row in rows:
+        #     item = Item(row['id'], row['name'], row['unit_price'], row['quantity'])
+        #     items.append(item)
         return items
     
     def find(self, id):
@@ -25,10 +25,10 @@ class ItemRepository:
     
     def find_by_order(self, order_id):
         rows = self.connection.execute('SELECT items.id AS "item_id", items.name, items.unit_price, items.quantity, orders.id AS "order_id", orders.customer, orders.date FROM items JOIN items_orders ON items_orders.item_id = items.id JOIN orders ON items_orders.order_id = orders.id WHERE orders.id = %s', [order_id])
-        items = []
-        for row in rows:
-            item = Item(row['item_id'], row['name'], row['unit_price'], row['quantity'])
-            items.append(item)
+        items = [Item(row['item_id'], row['name'], row['unit_price'], row['quantity']) for row in rows]
+        # for row in rows:
+        #     item = Item(row['item_id'], row['name'], row['unit_price'], row['quantity'])
+        #     items.append(item)
         return Order(rows[0]['order_id'], rows[0]['customer'], rows[0]['date'], items)
     
     def create(self, item):

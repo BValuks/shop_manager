@@ -44,7 +44,7 @@ INSERT INTO items (name, unit_price, quantity) VALUES
 INSERT INTO orders (customer, date) VALUES
 ('Benedict', '2023-05-30'),
 ('Will', '2022-07-04'),
-('Ian', '2023-03-18'),
+('Ian', '2023-03-27'),
 ('Simeon', '2022-10-16'),
 ('Megan', '2023-06-21');
 
@@ -52,6 +52,7 @@ INSERT INTO items_orders (item_id, order_id) VALUES
 (1, 1),
 (4, 1),
 (5, 1),
+(7, 1),
 (3, 2),
 (6, 2),
 (1, 3),
